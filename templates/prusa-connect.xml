@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>prusa-connect</Name>
+  <ExtraSearchTerms>prusa connect prusalink 3d printer fleet print farm mk4 core one xl</ExtraSearchTerms>
+  <Repository>prusaresearch/prusa-connect:0.1.0-beta.1</Repository>
+  <Registry>https://hub.docker.com/r/prusaresearch/prusa-connect</Registry>
+  <Network>bridge</Network>
+  <MyIP/>
+  <MyMAC/>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/prusa3d/prusa-connect/issues</Support>
+  <Project>https://github.com/prusa3d/prusa-connect</Project>
+  <ReadMe>https://github.com/prusa3d/prusa-connect/blob/main/docs/src/content/docs/container.md</ReadMe>
+  <Overview>Self-hosted Prusa Connect server for your Prusa printers: web UI, REST API, print file storage and printer management on your own network.&#13;
+&#13;
+BEFORE FIRST START: the config file is mounted read-only and Docker will create a folder in its place if the file is missing. From the Unraid terminal:&#13;
+mkdir -p /mnt/user/appdata/prusa-connect/{config.d,storage,data,tmp}&#13;
+curl -fL -o /mnt/user/appdata/prusa-connect/config.yaml https://github.com/prusa3d/prusa-connect/releases/download/v0.1.0-beta.1/config.yaml&#13;
+chown -R 10001:10001 /mnt/user/appdata/prusa-connect&#13;
+&#13;
+Config file template (every key is documented in comments): https://github.com/prusa3d/prusa-connect/releases/download/v0.1.0-beta.1/config.yaml&#13;
+&#13;
+The container runs as uid 10001 with a read-only root filesystem and no Linux capabilities, so the appdata folders must be owned by 10001:10001. The server reads config.yaml only at start; restart the container after editing it.&#13;
+&#13;
+Open the web UI and answer the first-run questions (how people sign in, how printers join).&#13;
+&#13;
+Optional ports (Show more settings, leave blank to skip): UDP 123 time server, UDP 13514 and 8514 for the printer logs extension. Finding nearby printers by mDNS only works with Network Type set to Host.&#13;
+&#13;
+Web interface: http://UNRAID_IP:8080</Overview>
+  <Category>Tools:Utilities</Category>
+  <WebUI>http://[IP]:[PORT:8080]</WebUI>
+  <TemplateURL>https://raw.githubusercontent.com/ccmpbll/unraid-docker-templates/refs/heads/master/templates/prusa-connect.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/prusa3d/prusa-connect/main/frontend/public/icons/icon-512.png</Icon>
+  <ExtraParams>--read-only --cap-drop=ALL --security-opt=no-new-privileges:true</ExtraParams>
+  <PostArgs/>
+  <CPUset/>
+  <DonateText/>
+  <DonateLink/>
+  <Requires/>
+  <Changes>
+###2026-11-19
+- Initial template for prusaresearch/prusa-connect 0.1.0-beta.1
+  </Changes>
+  <Config Name="Web UI Port" Target="8080" Default="8080" Mode="tcp" Description="Browser, REST API and printers" Type="Port" Display="always" Required="true" Mask="false">8080</Config>
+  <Config Name="Config File" Target="/config/config.yaml" Default="/mnt/user/appdata/prusa-connect/config.yaml" Mode="ro" Description="config.yaml from the release, downloaded before first start (see Overview). Read-only, read at container start" Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/prusa-connect/config.yaml</Config>
+  <Config Name="Database and Settings" Target="/config/config.d" Default="/mnt/user/appdata/prusa-connect/config.d" Mode="rw" Description="Database and settings the server writes. Must be owned by 10001:10001" Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/prusa-connect/config.d</Config>
+  <Config Name="Print Files" Target="/storage" Default="/mnt/user/appdata/prusa-connect/storage" Mode="rw" Description="Uploaded print files. Must be owned by 10001:10001" Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/prusa-connect/storage</Config>
+  <Config Name="Data" Target="/data" Default="/mnt/user/appdata/prusa-connect/data" Mode="rw" Description="Extensions and their data. Must be owned by 10001:10001" Type="Path" Display="advanced" Required="true" Mask="false">/mnt/user/appdata/prusa-connect/data</Config>
+  <Config Name="Temp" Target="/tmp" Default="/mnt/user/appdata/prusa-connect/tmp" Mode="rw" Description="Scratch space, the root filesystem is read-only. Large uploads pass through here. Must be owned by 10001:10001" Type="Path" Display="advanced" Required="true" Mask="false">/mnt/user/appdata/prusa-connect/tmp</Config>
+  <Config Name="Time Server (optional)" Target="123" Default="123" Mode="udp" Description="Time server for devices on your network. Leave blank to skip; fails to start if the host already uses UDP 123" Type="Port" Display="advanced" Required="false" Mask="false"/>
+  <Config Name="Printer Logs (optional)" Target="13514" Default="13514" Mode="udp" Description="buddy-debug-logs extension, log lines. Leave blank to skip" Type="Port" Display="advanced" Required="false" Mask="false"/>
+  <Config Name="Printer Metrics (optional)" Target="8514" Default="8514" Mode="udp" Description="buddy-debug-logs extension, metrics. Leave blank to skip" Type="Port" Display="advanced" Required="false" Mask="false"/>
+</Container>
