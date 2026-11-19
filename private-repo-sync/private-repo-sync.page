@@ -18,7 +18,8 @@ if (is_file($cfgfile)) {
 }
 
 $msg = ''; $out = '';
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && $csrf !== '' && hash_equals($csrf, $_POST['csrf_token'] ?? '')) {
+// Unraid's local_prepend.php already rejects POSTs without a valid csrf_token (and unsets it from $_POST), so no check here.
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $action = $_POST['action'] ?? '';
   if ($action === 'save') {
     $repos = preg_split('/\s+/', trim($_POST['repos'] ?? ''), -1, PREG_SPLIT_NO_EMPTY);
@@ -44,8 +45,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $csrf !== '' && hash_equals($csrf, 
   } elseif ($action === 'sync') {
     $out = shell_exec('/bin/bash ' . escapeshellarg($script) . ' 2>&1') ?: '(no changes)';
   }
-} elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $msg = 'Bad CSRF token, reload the page.';
 }
 
 ?>
