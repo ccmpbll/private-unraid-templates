@@ -25,7 +25,7 @@ The container runs as uid 10001 with a read-only root filesystem and no Linux ca
 &#13;
 Open the web UI and answer the first-run questions (how people sign in, how printers join).&#13;
 &#13;
-Optional ports (Show more settings, leave blank to skip): UDP 123 time server, UDP 13514 and 8514 for the printer logs extension. Finding nearby printers by mDNS only works with Network Type set to Host.&#13;
+Optional UDP ports are not published by default; add them with Add another Port: 123 (time server, only if the host is not already using it; Unraid's own NTP usually is), 13514 and 8514 (printer logs extension). Finding nearby printers by mDNS only works with Network Type set to Host.&#13;
 &#13;
 Web interface: http://UNRAID_IP:8080</Overview>
   <Category>Tools:Utilities</Category>
@@ -48,7 +48,4 @@ Web interface: http://UNRAID_IP:8080</Overview>
   <Config Name="Print Files" Target="/storage" Default="/mnt/user/appdata/prusa-connect/storage" Mode="rw" Description="Uploaded print files. Must be owned by 10001:10001" Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/prusa-connect/storage</Config>
   <Config Name="Data" Target="/data" Default="/mnt/user/appdata/prusa-connect/data" Mode="rw" Description="Extensions and their data. Must be owned by 10001:10001" Type="Path" Display="advanced" Required="true" Mask="false">/mnt/user/appdata/prusa-connect/data</Config>
   <Config Name="Temp" Target="/tmp" Default="/mnt/user/appdata/prusa-connect/tmp" Mode="rw" Description="Scratch space, the root filesystem is read-only. Large uploads pass through here. Must be owned by 10001:10001" Type="Path" Display="advanced" Required="true" Mask="false">/mnt/user/appdata/prusa-connect/tmp</Config>
-  <Config Name="Time Server (optional)" Target="123" Default="123" Mode="udp" Description="Time server for devices on your network. Leave blank to skip; fails to start if the host already uses UDP 123" Type="Port" Display="advanced" Required="false" Mask="false"/>
-  <Config Name="Printer Logs (optional)" Target="13514" Default="13514" Mode="udp" Description="buddy-debug-logs extension, log lines. Leave blank to skip" Type="Port" Display="advanced" Required="false" Mask="false"/>
-  <Config Name="Printer Metrics (optional)" Target="8514" Default="8514" Mode="udp" Description="buddy-debug-logs extension, metrics. Leave blank to skip" Type="Port" Display="advanced" Required="false" Mask="false"/>
 </Container>
