@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>mandos</Name>
+  <ExtraSearchTerms>mandos monitoring local llm ollama llama-swap prometheus loglook ulmo homelab nightly sweep jobs scheduler</ExtraSearchTerms>
+  <Repository>ccmpbll/mandos:latest</Repository>
+  <Registry>https://hub.docker.com/r/ccmpbll/mandos</Registry>
+  <Network>bridge</Network>
+  <MyIP/>
+  <MyMAC/>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/ccmpbll/mandos/issues</Support>
+  <Project>https://github.com/ccmpbll/mandos</Project>
+  <ReadMe>https://github.com/ccmpbll/mandos/blob/main/README.md</ReadMe>
+  <Overview>EXPERIMENTAL, built for my own homelab: it may not be useful to anyone else, and breaking changes between releases are expected.&#13;
+&#13;
+Mandos runs monitoring jobs on a schedule with a local language model (any OpenAI-compatible server such as llama-swap or Ollama), keeps their results and shows them on a few pages. It watches and reports; it does not change your systems. The image holds only the engine: the jobs themselves (Python, prompts, queries, pages) are a job pack in the Data folder, changed on the Jobs page or through the API, and an edit applies at the next run.&#13;
+&#13;
+Setup: open the web UI and create the first account. Then Settings: the model server and models, Pushover, and the services your jobs read (Prometheus, LogLook, ulmo, Pi-hole, Home Assistant). Leave Starter Pack on to get a small example job, or send your own pack with the API (Settings, Account, API tokens).&#13;
+&#13;
+Mandos needs no Docker socket and no host access. Login cookies are Secure: reach it over HTTPS through a reverse proxy, or turn Insecure Cookie on for plain http://UNRAID_IP.&#13;
+&#13;
+Web interface: http://UNRAID_IP:8080</Overview>
+  <Category>Tools:Utilities Network:Management</Category>
+  <WebUI>http://[IP]:[PORT:8080]</WebUI>
+  <TemplateURL>https://raw.githubusercontent.com/ccmpbll/private-unraid-templates/refs/heads/master/templates/mandos.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/ccmpbll/private-unraid-templates/refs/heads/master/images/mandos.png</Icon>
+  <ExtraParams/>
+  <PostArgs/>
+  <CPUset/>
+  <DonateText/>
+  <DonateLink/>
+  <Requires/>
+  <Changes>
+###2026-11-25
+- Initial template for mandos 2026.11.25
+  </Changes>
+  <Config Name="WebUI Port" Target="8080" Default="8080" Mode="tcp" Description="Port for the web pages and the API. Not needed when a reverse proxy on the same Docker network reaches the container." Type="Port" Display="always" Required="false" Mask="false">8080</Config>
+  <Config Name="Data" Target="/data" Default="/mnt/user/appdata/mandos" Mode="rw" Description="The database (settings, users, run history, the jobs' records), the job pack in jobs/, and the login key. Keep on persistent storage." Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/mandos</Config>
+  <Config Name="Time Zone" Target="TZ" Default="America/New_York" Mode="" Description="Schedules and the dates jobs write use this zone." Type="Variable" Display="always" Required="true" Mask="false">America/New_York</Config>
+  <Config Name="Starter Pack" Target="MANDOS_STARTER" Default="1" Mode="" Description="1 copies the example job pack into an empty jobs folder on first start. 0 to start with no jobs (send your own pack through the API)." Type="Variable" Display="always" Required="false" Mask="false">1</Config>
+  <Config Name="Insecure Cookie" Target="MANDOS_INSECURE_COOKIE" Default="" Mode="" Description="Set to 1 only when you open mandos over plain http on an address other than localhost (for example http://UNRAID_IP:8080). Leave empty behind an HTTPS reverse proxy." Type="Variable" Display="advanced" Required="false" Mask="false"/>
+  <Config Name="Proxy Hops" Target="MANDOS_PROXY_HOPS" Default="1" Mode="" Description="Reverse proxies in front of mandos; the login's wrong-password limit reads the client address from X-Forwarded-For. 0 when nothing sits in front." Type="Variable" Display="advanced" Required="false" Mask="false">1</Config>
+  <Config Name="Disable Login" Target="MANDOS_DISABLE_AUTH" Default="" Mode="" Description="Set to 1 to run without a login screen (only behind your own gate). Also turns off editing the job pack." Type="Variable" Display="advanced" Required="false" Mask="false"/>
+</Container>
